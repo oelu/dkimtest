@@ -15,11 +15,12 @@ Options:
 """
 __author__ = 'olivier'
 
+import logging as log
 import smtplib
-from smtplib import SMTPException
 import sys
+
 from email.message import Message
-from pprint import pprint
+from smtplib import SMTPException
 
 from dkim import sign
 from docopt import docopt
@@ -32,7 +33,8 @@ def send_mail(recipient,
               domain,
               body="DKIM Test Message",
               subject="DKIM Test Message",
-              printonly=False):
+              printonly=False,
+              verbose=False):
     """
     Sends a DKIM signed E-Mail.
 
@@ -44,12 +46,13 @@ def send_mail(recipient,
     body        e-mail message body
     subject     e-mail subject
     printonly   print only the header, do not send mail
+    verbose     print smtp debug output
     """
     try:
         private_key = open(keyfile).read()
     except IOError, ex:
-        print "Error: file %s is not readable " % (keyfile)
-        print ex.message
+        log.error("file %s is not readable", keyfile)
+        log.error(ex.message)
         sys.exit(2)
 
     # compose message
@@ -66,35 +69,28 @@ def send_mail(recipient,
                domain,
                private_key)
     dkimmail = sig + email
-    printverbose("Message is: ")
-    printverbose(dkimmail)
+    log.info("e-mail message is:")
+    log.info(dkimmail)
 
     if printonly:
         print dkimmail
     else:
         try:
             server = smtplib.SMTP('localhost')
-            if VERBOSE:
+            # TODO: check loglevel
+            if verbose:
+                log.info("smtp debug level was set to 1")
                 server.set_debuglevel(1)
             server.sendmail(sender, recipient, dkimmail)
             print "Successfully sent email"
         except SMTPException:
-            print "Error: unable to send email"
-
-
-def printverbose(msg):
-    """
-    prints a message if global variable VERBOSE is True
-    """
-    if VERBOSE:
-        pprint(msg)
+            log.error("unable to send email")
 
 
 def main():
     """
     main function
     """
-    global VERBOSE
     # gets arguments from docopt
     arguments = docopt(__doc__)
     # assigns docopt arguments
@@ -103,11 +99,16 @@ def main():
     keyfile = arguments['<keyfile>']
     selector = arguments['<selector>']
     domain = arguments['<domain>']
-    VERBOSE = arguments['--verbose']
+    verbose = arguments['--verbose']
     printonly = arguments['--printonly']
 
-    printverbose(arguments)
-    send_mail(recipient, sender, selector, keyfile, domain, printonly)
+    if verbose:
+        log.basicConfig(format="%(levelname)s: %(message)s", level=log.DEBUG)
+        log.info("Verbose output activated.")
+    else:
+        log.basicConfig(format="%(levelname)s: %(message)s")
+
+    send_mail(recipient, sender, selector, keyfile, domain, printonly=printonly, verbose=verbose)
 
 
 if __name__ == "__main__":
