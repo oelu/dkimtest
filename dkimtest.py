@@ -26,6 +26,7 @@ from dkim import sign
 from docopt import docopt
 
 
+# TODO: function parameters are to long, make options dict
 def send_mail(recipient,
               sender,
               selector,
@@ -108,7 +109,13 @@ def main():
     else:
         log.basicConfig(format="%(levelname)s: %(message)s")
 
-    send_mail(recipient, sender, selector, keyfile, domain, printonly=printonly, verbose=verbose)
+    send_mail(recipient,
+              sender,
+              selector,
+              keyfile,
+              domain,
+              printonly=printonly,
+              verbose=verbose)
 
 
 if __name__ == "__main__":
