@@ -2,7 +2,7 @@
 Script to send DKIM signed messages
 
 ## Requirements
-Requires the folowing non-standard pyton modules: 
+Requires the following non-standard python modules: 
 * dkimpy
 * docopt
 
