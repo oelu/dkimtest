@@ -39,8 +39,10 @@ def send_mail(recipient,
     recipient   recipient address
     sender      sender address
     selector    DKIM selector
-    private_key private key
-
+    keyfile     file containing the private key
+    domain      sending domain
+    body        e-mail message body
+    subject     e-mail subject
     printonly   print only the header, do not send mail
     """
     try:
