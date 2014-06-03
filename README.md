@@ -1,7 +1,7 @@
- = DKIM Test 
+# DKIM Test 
 Script to send dkim signed messages
 
-== Usage
+## Usage
 
     dkimtest.py
     Send DKIM signed mails.
