@@ -1,5 +1,10 @@
 # DKIM Test 
-Script to send dkim signed messages
+Script to send DKIM signed messages
+
+## Requirements
+Requires the folowing non-standard pyton modules: 
+* dkimpy
+* docopt
 
 ## Usage
 
