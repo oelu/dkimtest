@@ -84,7 +84,7 @@ def send_mail(recipient,
 
 def printverbose(msg):
     """
-    prints a message if global variable Verbose=True
+    prints a message if global variable VERBOSE is True
     """
     if VERBOSE:
         pprint(msg)
