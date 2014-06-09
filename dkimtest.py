@@ -10,7 +10,7 @@ Usage:
 
 Options:
     -v --verbose   print verbose messages
-    -p --printonly only prints the header, mail is not sent
+    -p --printonly  only prints the header, mail is not sent
 
 """
 __author__ = 'olivier'
